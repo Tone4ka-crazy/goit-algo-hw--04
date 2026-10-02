@@ -1,0 +1,39 @@
+import sys
+from pathlib import Path
+from colorama import init, Fore
+init(autoreset=True) #скидання кольору на стандартний після кожної команди "print"
+
+def visualize_directory(dir_path: Path, indent: str = "    "):
+    """
+        Рекурсивно обходить директорію та виводить її структуру.
+        Використовує кольори: Синій для папок, Зелений для файлів.
+        """
+    items = sorted(dir_path.iterdir(), key=lambda x: x.name.lower())
+    #iterdir() повертає всі файли та папки відсортовано
+    for item in items:
+        if item.is_dir():
+            #перевіряємо чи є об'єкт папкою і виводимо її назву синім кольором
+            print(f"{indent}{Fore.BLUE}{item.name}/")
+            #рекурсивно викликаємо цю ж функцію для підпапок
+            visualize_directory(item, indent + "    ")
+        else:
+            #якщо об'єкт - файл то виводимо його назву зеленим кольором
+            print(f"{indent}{Fore.GREEN}{item.name}")
+
+def main():
+    #sys.argv[0] - це ім'я файлу (hw03.py), а sys.argv[1] - це шлях
+    if len(sys.argv) < 2:
+        print(f"{Fore.RED}Помилка: Вкажіть шлях до директорії як аргумент.")
+        sys.exit()
+    #Отримуємо шлях з термінала та перетворюємо його на об'єкт Path
+    target_path = Path(sys.argv[1])
+    #обробка помилок користувача
+    if not target_path.exists() or not target_path.is_dir():
+        print(f"{Fore.RED}Помилка: Шлях '{target_path}' не існує або не веде до директорії")
+        sys.exit()
+    #друкуємо назву основної папки та запускаємо рекурсію
+    print(f"{Fore.BLUE}{target_path.name}/")
+    visualize_directory(target_path)
+
+if __name__ == "__main__":
+    main()
