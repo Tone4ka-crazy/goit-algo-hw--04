@@ -1,0 +1,18 @@
+def total_salary(path:str):
+    total=0
+    try:
+        with open(path,"r", encoding="utf-8") as file:
+            lines = [el.split(",") for el in file.readlines() if el.strip()]
+            for name,salary in lines:
+                salary = int(salary)
+                total += salary
+        if len(lines) == 0:
+            return 0, 0
+        average = total / len(lines)
+        return total, average
+    except FileNotFoundError:
+        print("Помилка: Файл не знайдено, перевірте шлях до файлу.")
+        return None, None
+    except Exception as error:
+        print(f"Помилка: Файл пошкоджений або має неправильний формат. Деталі: {error}")
+        return None, None
