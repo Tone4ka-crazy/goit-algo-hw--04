@@ -1,0 +1,15 @@
+def get_cats_info(path:str):
+    cats_info = []
+    try:
+        with open(path, 'r', encoding='utf-8') as file:
+            lines = [el.strip().split(',') for el in file.readlines() if el.strip()]
+            for id, name, age in lines:
+                cats_dict = {'id': id, 'name': name, 'age': age}
+                cats_info.append(cats_dict)
+        return cats_info
+    except FileNotFoundError:
+         print("Помилка: Файл не знайдено, перевірте шлях до файлу.")
+         return None
+    except Exception as error:
+         print(f"Помилка: Файл пошкоджений або має неправильний формат. Деталі: {error}")
+         return None
